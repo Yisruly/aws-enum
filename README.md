@@ -23,9 +23,7 @@ A lightweight AWS enumeration script for use during cloud penetration tests.
 ## Usage
 
 
-'''bash
 python3 aws_enum.py
-'''
 
 
 ## Purpose 
