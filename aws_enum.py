@@ -36,3 +36,23 @@ def list_security_groups():
         print("Access denied:", str(e))
 
 list_security_groups()
+
+def list_nacls():
+    """Lists Network ACLs and their inbound rules."""
+    ec2 = boto3.client('ec2', region_name='eu-north-1')
+    try:
+        nacls = ec2.describe_network_acls()
+        for nacl in nacls['NetworkAcls']:
+            print(f"\nNACL: {nacl['NetworkAclId']} (Default: {nacl['IsDefault']})")
+            inbound = [r for r in nacl['Entries'] if not r['Egress']]
+            inbound.sort(key=lambda x: x['RuleNumber'])
+            for rule in inbound:
+                protocol = rule.get('Protocol', 'all')
+                action = rule.get('RuleAction', 'unknown')
+                cidr = rule.get('CidrBlock', 'unknown')
+                rule_num = rule.get('RuleNumber', '?')
+                print(f"  Rule {rule_num}: {action} {cidr} protocol {protocol}")
+    except Exception as e:
+        print("Error:", str(e))
+
+list_nacls()
