@@ -56,3 +56,29 @@ def list_nacls():
         print("Error:", str(e))
 
 list_nacls()
+
+def parse_flow_log(line):
+    parts = line.split()
+    record = {
+        "version": int(parts[0]),
+        "account_id": parts[1],
+        "interface_id": parts[2],
+        "srcaddr": parts[3],
+        "dstaddr": parts[4],
+        "srcport": int(parts[5]),
+        "dstport": int(parts[6]),
+        "protocol": parts[7],
+        "packets": int(parts[8]),
+        "bytes": int(parts[9]),
+        "start": int(parts[10]),
+        "end": int(parts[11]),
+        "action": parts[12],
+        "log_status": parts[13]
+    }
+    return record
+
+line = "2 510664426342 eni-0fa6a0a4b5375d289 172.31.3.184 199.203.143.48 22 51368 6 1 52 1779628079 1779628108 ACCEPT OK"
+result = parse_flow_log(line)
+print(result)
+print(result["srcaddr"])
+print(result["action"])
